@@ -1,0 +1,28 @@
+# Adapted from https://circleci.com/docs/install-and-use-yarn/
+
+machine:
+  environment:
+    YARN_VERSION: 0.18.0
+    PATH: "${PATH}:${HOME}/.yarn/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
+
+  node:
+    version: 6.1.0
+
+dependencies:
+  pre:
+    - |
+      if [[ ! -e ~/.yarn/bin/yarn || $(yarn --version) != "${YARN_VERSION}" ]]; then
+        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+      fi
+  cache_directories:
+    - ~/.yarn
+    - ~/.cache/yarn
+
+  override:
+    - yarn global add create-react-app
+    - create-react-app my-app
+    - cd my-app && yarn install
+
+test:
+  override:
+    - cd my-app && npm run build
