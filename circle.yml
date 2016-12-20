@@ -1,5 +1,9 @@
 # Adapted from https://circleci.com/docs/install-and-use-yarn/
 
+general:
+  artifacts:
+    - "my-app/npm-debug.log" # relative to the build directory
+
 machine:
   environment:
     YARN_VERSION: 0.18.0
